@@ -12,6 +12,35 @@ setwd(paste0(base_path,"data/"))
 df_ <- read.delim("absence.txt", header = TRUE, sep = "\t", dec = ".")
 df_
 
-      
+# Extract diffrent substrates type for absence data
+
+# Extract diffrent substrates type for presence data
+
+# Plot medeitraniean sea
+
+# Trim the plot of mediteranian sea
+
+# Plot diffrents substrate type for absence data
+
+
+# Perform pca to reduce dimension 
+
+
+
+
+# Plot diffrents substrate type for presence data
+
+
+# Perform pca to reduce dimension 
+
+
+# Correlation between presence and absence data
+
+
+
+
+
+
+
 
 
