@@ -61,6 +61,9 @@ absebce_SeabedSeabed <- filter(df_absence, df_absence$Substrate=="SeabedSeabed")
 
 
 # Plot medeitraniean sea
+figure(width=9.75,height=5.28)
+plotmap(lon=lon, lat=lat, main="Mediterranean Sea")
+plotmap(xlim=lon, ylim=lat, main="Mediterranean Sea"
 
 # Trim the plot of mediteranian sea
 
