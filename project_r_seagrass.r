@@ -61,11 +61,24 @@ absebce_SeabedSeabed <- filter(df_absence, df_absence$Substrate=="SeabedSeabed")
 
 
 # Plot medeitraniean sea
-figure(width=9.75,height=5.28)
-plotmap(lon=lon, lat=lat, main="Mediterranean Sea")
-plotmap(xlim=lon, ylim=lat, main="Mediterranean Sea"
+library(viridisLite)
+library(viridis)
+library(ggplot2)
+library(tmap)
+library(tidyr)
+library(RColorBrewer)
+worldmap <- ne_countries(scale = 'medium', type = 'map_units',
+                         returnclass = 'sf')
 
-# Trim the plot of mediteranian sea
+ 
+
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-10, 45), ylim = c(30, 50), expand = FALSE) + 
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+
 
 # Plot diffrents substrate type for absence data
 
