@@ -12,16 +12,12 @@ setwd(paste0(base_path,"data/"))
 df_absence <- read.delim("absence.txt", header = TRUE, sep = "\t", dec = ".")
 df_presence <- read.delim("presence.txt", header = TRUE, sep = "\t", dec = ".")
 
-
-# Extract diffrent substrates type for absence data
-# Extract diffrent substrates type for presence data
-
-# Extract 9 substrates 
-# Filter the specific part of data (learn it from statistic)
-# This symbol $ when I want choose feature from dataset
+#extract 9 substrates 
+#filter the specific part of data (learn it from statistic)
+# this symbol $ when i want choose feature from dataset
 # == to check the condition
 
-# Adding the package for function filter(it doesnt work without this so i find it in google)
+#adding the package for function filter(it doesnt work without this so i find it in google)
 library(dplyr)
 
 absence_Sand <- filter(df_absence, df_absence$Substrate=="Sand")
@@ -51,33 +47,179 @@ absebce_Cymodocea_nodosa_meadows <- filter(df_absence, df_absence$Substrate=="Cy
 
 presence_SeabedSeabed <- filter(df_presence, df_presence$Substrate=="SeabedSeabed")
 absebce_SeabedSeabed <- filter(df_absence, df_absence$Substrate=="SeabedSeabed")
-
-
-
-
-
-
-
-
-
-# Plot medeitraniean sea
-library(viridisLite)
-library(viridis)
-library(ggplot2)
-library(tmap)
-library(tidyr)
-library(RColorBrewer)
+#for latitude longitude of all over the world
+#install.packages(c("rnaturalearth","rnaturalearthdata" ))
+library("rnaturalearth")
+library("rnaturalearthdata")
 worldmap <- ne_countries(scale = 'medium', type = 'map_units',
                          returnclass = 'sf')
-
- 
-
+library(ggplot2)
+#plot absence sand
 ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
-  coord_sf(xlim = c(-10, 45), ylim = c(30, 50), expand = FALSE) + 
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absence_Sand, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
   theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = "darkturquoise"))
+#plot absence_Finemud
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absence_Finemud, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absence_Posidonia_oceanica_meadows 
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absence_Posidonia_oceanica_meadows , aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absence_Seabed_Sandy_mud 
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absence_Seabed_Sandy_mud , aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absence_Coarse_mixed_sediment 
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absence_Coarse_mixed_sediment , aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absence_Muddy_sand
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absence_Muddy_sand, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absebce_Dead_mattes_of_Posidonia_oceanica
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absebce_Dead_mattes_of_Posidonia_oceanica, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absebce_Cymodocea_nodosa_meadows
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absebce_Cymodocea_nodosa_meadows, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#absebce_SeabedSeabed
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = absebce_SeabedSeabed, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "red") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Sand
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Sand, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Finemud
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Finemud, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Posidonia_oceanica_meadows
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data =presence_Posidonia_oceanica_meadows, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Seabed_Sandy_mud
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Seabed_Sandy_mud, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Coarse_mixed_sediment
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Coarse_mixed_sediment, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Muddy_sand
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Muddy_sand, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Dead_mattes_of_Posidonia_oceanica
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Dead_mattes_of_Posidonia_oceanica, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_Cymodocea_nodosa_meadows
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_Cymodocea_nodosa_meadows, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+#presence_SeabedSeabed
+ggplot() + geom_sf(data = worldmap, color = "white", fill = "gray") +
+  coord_sf(xlim = c(-5.6, 36.29), ylim = c(30.18, 45.97), expand = FALSE) + 
+  geom_point(data = presence_SeabedSeabed, aes(x = LONGITUDE, y = LATITUDE), size = 0.5, 
+             shape = 21, fill = "yellow") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "darkturquoise"))
+
+
+
+
 
 
 # Plot diffrents substrate type for absence data
