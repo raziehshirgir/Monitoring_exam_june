@@ -1,0 +1,144 @@
+
+#name of the folder which include all the dataset and the project name 
+
+
+base_dir <- "/Users/alireza/Desktop/R_project_july/"
+#to specify region of intrest italy (longitude and latitude )
+shape_path <- paste0(base_dir, "countries_shape/ne_10m_admin_0_countries.shp") 
+#  to attach two directory together 
+setwd(paste0(base_dir, "dataset/"))
+# Let's list the data  what is patern?
+ds_list_2015 <- base::list.files(path=".", pattern = "2015")
+ds_list_2016 <- base::list.files(path=".", pattern = "2016")
+ds_list_2017 <- base::list.files(path=".", pattern = "2017")
+ds_list_2018 <- base::list.files(path=".", pattern = "2018")
+ds_list_2019 <- base::list.files(path=".", pattern = "2019")
+ds_list_2020 <- base::list.files(path=".", pattern = "2020")
+ds_list_2021 <- base::list.files(path=".", pattern = "2021")
+
+# Raster and sp package are related to eachother to import, plot, and process data
+
+# uncomment for installing the packages
+#install.packages("sp")
+#install.packages("raster")
+library(sp)
+library(raster)
+
+# import the data in raster format
+ds_2015 <- base::lapply(ds_list_2015, raster)
+ds_2016 <- base::lapply(ds_list_2016, raster)
+ds_2017 <- base::lapply(ds_list_2017, raster)
+ds_2018 <- base::lapply(ds_list_2018, raster)
+ds_2019 <- base::lapply(ds_list_2019, raster)
+ds_2020 <- base::lapply(ds_list_2020, raster)
+ds_2021 <- base::lapply(ds_list_2021, raster)
+
+
+# to stack all the 12 raster variable  
+ds_stack_2015 <- raster :: stack(ds_2015)
+ds_stack_2016 <- raster :: stack(ds_2016)
+ds_stack_2017 <- raster :: stack(ds_2017)
+ds_stack_2018 <- raster :: stack(ds_2018)
+ds_stack_2019 <- raster :: stack(ds_2019)
+ds_stack_2020 <- raster :: stack(ds_2020)
+ds_stack_2021 <- raster :: stack(ds_2021)
+
+# Let's plot the world - Blue means colder and Red means Hotter
+#the color chosing for background and the hot point
+cl <- colorRampPalette(c('light blue', 'dark red'))(1000)
+
+# Let's crop Italy & Focus the Analysis on Italy
+
+#install.packages("sf")
+library(sf)
+
+country <- "Italy"
+shapes <- sf :: st_read(shape_path)
+Italy_shape <- shapes %>%
+  dplyr::filter(ADMIN == country)
+
+Italy_ex <- raster::extent(Italy_shape)
+
+Italy_crop_2015 <- raster::crop(x = ds_stack_2015 ,y = Italy_ex)
+Italy_crop_2016 <- raster::crop(x = ds_stack_2016 ,y = Italy_ex)
+Italy_crop_2017 <- raster::crop(x = ds_stack_2017 ,y = Italy_ex)
+Italy_crop_2018 <- raster::crop(x = ds_stack_2018 ,y = Italy_ex)
+Italy_crop_2019 <- raster::crop(x = ds_stack_2019 ,y = Italy_ex)
+Italy_crop_2020 <- raster::crop(x = ds_stack_2020 ,y = Italy_ex)
+Italy_crop_2021 <- raster::crop(x = ds_stack_2021 ,y = Italy_ex)
+
+Italy_ds_2015 <- raster::mask(x = Italy_crop_2015, mask = Italy_shape)
+Italy_ds_2016 <- raster::mask(x = Italy_crop_2016, mask = Italy_shape)
+Italy_ds_2017 <- raster::mask(x = Italy_crop_2017, mask = Italy_shape)
+Italy_ds_2018 <- raster::mask(x = Italy_crop_2018, mask = Italy_shape)
+Italy_ds_2019 <- raster::mask(x = Italy_crop_2019, mask = Italy_shape)
+Italy_ds_2020 <- raster::mask(x = Italy_crop_2020, mask = Italy_shape)
+Italy_ds_2021 <- raster::mask(x = Italy_crop_2021, mask = Italy_shape)
+
+
+
+#plot(Italy_ds_2015$layer.1, col = cl)
+plot(Italy_ds_2015, col = cl)
+# Do the PCA & see the outcome 
+
+# Mathematical tools 
+install.packages("Rstoolbox")
+library(RStoolbox)
+
+pca_2015 <- rasterPCA(Italy_ds_2015)
+pca_2016 <- rasterPCA(Italy_ds_2016)
+pca_2017 <- rasterPCA(Italy_ds_2017)
+pca_2018 <- rasterPCA(Italy_ds_2018)
+pca_2019 <- rasterPCA(Italy_ds_2019)
+pca_2020 <- rasterPCA(Italy_ds_2020)
+pca_2021 <- rasterPCA(Italy_ds_2021)
+
+# Summary of PCAs 
+summary(pca_2015$model)
+summary(pca_2016$model)
+summary(pca_2017$model)
+summary(pca_2018$model)
+summary(pca_2019$model)
+summary(pca_2020$model)
+summary(pca_2021$model)
+
+
+cl <- colorRampPalette(c('light blue', 'dark red'))(1000)
+plot(pca_2015$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2015")
+plot(pca_2016$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2016")
+plot(pca_2017$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2017")
+plot(pca_2018$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2018")
+plot(pca_2019$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2019")
+plot(pca_2020$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2020")
+plot(pca_2021$map$PC1, col = cl, xlab="Longitude", ylab="Latitude", main = "2021")
+
+
+# plot the RGB for difference: consist of 3layer of color
+#blue for 2021, red for 2015, green for 2018
+# let's stack them to make the rgb plot
+#not only overlap between new and old spot but also increasing occurrence
+rgb_stack <- raster :: stack(pca_2015$map$PC1, pca_2018$map$PC1, pca_2021$map$PC1)
+plotRGB(rgb_stack,  r=1, g=2, b=3, stretch = 'lin', main = "RGB plot")
+#another hypothesis i want to check it out if it is happening randomly  by chance or there is regular phenamenon
+rgb_stack <- raster :: stack(pca_2019$map$PC1, pca_2020$map$PC1, pca_2021$map$PC1)
+plotRGB(rgb_stack,  r=1, g=2, b=3, stretch = 'lin', main = "RGB plot")
+
+
+# to calculate the number of occurrence of hot spot = Make a histogram of data 
+cl <- colorRampPalette(c('orange', 'gray'))(1000)
+hist_it_2015 <- hist(Italy_ds_2015 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+hist_it_2016 <- hist(Italy_ds_2016 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+hist_it_2017 <- hist(Italy_ds_2017 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+hist_it_2018 <- hist(Italy_ds_2018 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+hist_it_2019 <- hist(Italy_ds_2019 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+hist_it_2020 <- hist(Italy_ds_2020 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+cl <- colorRampPalette(c('yellow', 'gray'))(1000)
+hist_it_2021 <- hist(Italy_ds_2021 , xlim = c(200, 280), ylim = c(0, 500), col = cl)
+
+print(hist_it_2015)
+print(hist_it_2016)
+print(hist_it_2017)
+print(hist_it_2018)
+print(hist_it_2019)
+print(hist_it_2020)
+print(hist_it_2021)
